@@ -1,0 +1,7 @@
+/* Disable WordPress Admin Bar for all users except administrators */
+add_filter( 'show_admin_bar', 'restrict_admin_bar' );
+
+function restrict_admin_bar( $show ) {
+    // Trả về TRUE nếu người dùng hiện tại là 'administrator', ngược lại là FALSE
+    return current_user_can( 'administrator' ) ? $show : false;
+}
