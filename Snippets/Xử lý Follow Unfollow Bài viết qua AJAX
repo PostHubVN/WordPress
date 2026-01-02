@@ -1,0 +1,40 @@
+/**
+ * 1. Xử lý AJAX cho Theo dõi/Bỏ theo dõi bài viết
+ */
+add_action('wp_ajax_toggle_follow_post', 'dev_toggle_follow_post_handler');
+function dev_toggle_follow_post_handler() {
+    $post_id = intval($_POST['post_id']);
+    $user_id = get_current_user_id();
+
+    if (!$user_id) wp_send_json_error('Chưa đăng nhập');
+    if (!$post_id) wp_send_json_error('ID bài viết không hợp lệ');
+
+    // Lấy danh sách bài viết đã lưu
+    $followed_posts = get_user_meta($user_id, 'dev_followed_posts', true) ?: [];
+
+    if (in_array($post_id, $followed_posts)) {
+        // Xóa khỏi danh sách
+        $followed_posts = array_diff($followed_posts, [$post_id]);
+        $status = 'unfollowed';
+    } else {
+        // Thêm vào danh sách
+        $followed_posts[] = $post_id;
+        $status = 'followed';
+    }
+
+    update_user_meta($user_id, 'dev_followed_posts', $followed_posts);
+    wp_send_json_success(['status' => $status]);
+}
+
+/**
+ * 2. Hàm hiển thị chữ cho nút Lưu bài viết (Dùng cho Bricks Echo)
+ */
+function dev_get_post_follow_text($post_id = null) {
+    if (!$post_id) $post_id = get_the_ID();
+    $user_id = get_current_user_id();
+    
+    if (!$user_id) return 'Lưu bài viết';
+    
+    $followed_posts = get_user_meta($user_id, 'dev_followed_posts', true) ?: [];
+    return in_array($post_id, $followed_posts) ? 'Đã lưu' : 'Lưu bài viết';
+}
