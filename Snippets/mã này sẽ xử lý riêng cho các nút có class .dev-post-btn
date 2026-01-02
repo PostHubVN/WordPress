@@ -1,0 +1,42 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Tìm các nút có class .post-follow-btn
+    const postButtons = document.querySelectorAll('.post-follow-btn');
+
+    postButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const postId = this.getAttribute('data-post-id');
+            if (!postId) return;
+
+            const originalText = this.innerText;
+            this.innerText = '...';
+            this.style.opacity = '0.5';
+
+            fetch('/wp-admin/admin-ajax.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: 'toggle_follow_post',
+                    post_id: postId
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                this.style.opacity = '1';
+                if (data.success) {
+                    if (data.data.status === 'followed') {
+                        this.innerText = 'Đã lưu';
+                        this.classList.add('is-saved');
+                    } else {
+                        this.innerText = 'Lưu bài viết';
+                        this.classList.remove('is-saved');
+                    }
+                } else {
+                    alert('Vui lòng đăng nhập!');
+                    this.innerText = originalText;
+                }
+            });
+        });
+    });
+});
