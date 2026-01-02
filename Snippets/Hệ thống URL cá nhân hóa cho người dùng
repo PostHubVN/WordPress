@@ -1,0 +1,72 @@
+/**
+ * HỆ THỐNG AUTHOR URL: ĐỒNG BỘ USER_NICENAME & THÊM TIỀN TỐ @
+ */
+
+// ----------------------------------------------------
+// PHẦN 1: ĐỒNG BỘ KHI CẬP NHẬT TRANG CÁ NHÂN
+// ----------------------------------------------------
+
+add_action('profile_update', 'sync_username_public_to_nicename', 10, 2);
+function sync_username_public_to_nicename($user_id, $old_user_data) {
+    // Kiểm tra xem có dữ liệu username_public gửi lên không
+    if (isset($_POST['public_name']) && !empty($_POST['public_name'])) {
+        $new_slug = sanitize_title($_POST['public_name']);
+        
+        // Chỉ cập nhật nếu slug mới khác với user_nicename hiện tại
+        if ($new_slug !== $old_user_data->user_nicename) {
+            
+            // Đảm bảo slug là duy nhất (WordPress tự thêm hậu tố nếu trùng)
+            $unique_slug = wp_unique_user_nicename($new_slug, $user_id);
+            
+            // Sử dụng $wpdb để cập nhật trực tiếp bảng wp_users
+            global $wpdb;
+            $wpdb->update(
+                $wpdb->users,
+                array('user_nicename' => $unique_slug),
+                array('ID' => $user_id)
+            );
+        }
+    }
+}
+
+// ----------------------------------------------------
+// PHẦN 2: THIẾT LẬP URL CÓ DẤU @
+// ----------------------------------------------------
+
+/**
+ * 1. Đổi link hiển thị sang /author/@nicename
+ */
+add_filter('author_link', 'custom_author_at_link', 10, 2);
+function custom_author_at_link($link, $author_id) {
+    $user = get_userdata($author_id);
+    if ($user) {
+        $author_base = get_option('author_base', 'author');
+        return home_url('/' . $author_base . '/@' . $user->user_nicename . '/');
+    }
+    return $link;
+}
+
+/**
+ * 2. Cấu hình Rewrite Rule để WP hiểu dấu @
+ */
+add_action('init', 'custom_at_rewrite_rules');
+function custom_at_rewrite_rules() {
+    $author_base = get_option('author_base', 'author');
+    
+    // Ưu tiên cao nhất cho cấu trúc có @
+    add_rewrite_rule(
+        '^' . $author_base . '/@([^/]+)/?$',
+        'index.php?author_name=$matches[1]',
+        'top'
+    );
+}
+
+/**
+ * 3. Tự động sửa lỗi 404 khi truy cập đường dẫn có @
+ */
+add_action('pre_get_posts', 'handle_at_author_request');
+function handle_at_author_request($query) {
+    if (!is_admin() && $query->is_main_query() && $query->get('author_name')) {
+        $query->is_author = true;
+    }
+}
