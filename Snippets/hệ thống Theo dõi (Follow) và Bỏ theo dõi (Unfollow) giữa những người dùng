@@ -1,0 +1,51 @@
+/**
+ * 1. Xử lý logic Follow/Unfollow qua AJAX
+ */
+add_action('wp_ajax_toggle_follow', 'dev_toggle_follow_handler');
+function dev_toggle_follow_handler() {
+    $target_user_id = intval($_POST['target_id']);
+    $current_user_id = get_current_user_id();
+
+    if (!$current_user_id || $current_user_id == $target_user_id) wp_send_json_error();
+
+    // Lấy danh sách đang theo dõi của mình
+    $following = get_user_meta($current_user_id, 'dev_following', true) ?: [];
+    // Lấy danh sách người theo dõi của đối phương
+    $followers = get_user_meta($target_user_id, 'dev_followers', true) ?: [];
+
+    if (in_array($target_user_id, $following)) {
+        // Unfollow
+        $following = array_diff($following, [$target_user_id]);
+        $followers = array_diff($followers, [$current_user_id]);
+        $status = 'unfollowed';
+    } else {
+        // Follow
+        $following[] = $target_user_id;
+        $followers[] = $current_user_id;
+        $status = 'followed';
+    }
+
+    update_user_meta($current_user_id, 'dev_following', $following);
+    update_user_meta($target_user_id, 'dev_followers', $followers);
+
+    wp_send_json_success(['status' => $status, 'count' => count($followers)]);
+}
+
+/**
+ * 2. Hàm lấy số lượng để hiển thị trong Bricks (Echo)
+ */
+function dev_get_follow_stats($type = 'followers', $user_context = 'current') {
+    // Xác định User ID dựa trên ngữ cảnh (Người dùng hiện tại hoặc Tác giả bài viết)
+    if ($user_context === 'author') {
+        $user_id = get_the_author_meta('ID');
+    } else {
+        $user_id = get_current_user_id();
+    }
+
+    if (!$user_id) return 0;
+
+    $meta_key = ($type === 'following') ? 'dev_following' : 'dev_followers';
+    $data = get_user_meta($user_id, $meta_key, true);
+
+    return is_array($data) ? count($data) : 0;
+}
