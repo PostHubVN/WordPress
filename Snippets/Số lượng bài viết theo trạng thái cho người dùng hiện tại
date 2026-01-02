@@ -1,0 +1,46 @@
+/**
+ * Hàm quản lý chỉ số bài viết: Đếm số lượng và Tính điểm
+ * @param string $type: 'publish', 'draft', 'pending', hoặc 'score'
+ */
+function dev_user_stats($type = 'publish') {
+    $user_id = get_current_user_id();
+    if (!$user_id) return 0;
+
+    // Chạy truy vấn 1 lần duy nhất để lấy tất cả bài viết của user
+    $args = array(
+        'author'         => $user_id,
+        'post_type'      => 'post',
+        'post_status'    => array('publish', 'draft', 'pending'),
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+    );
+
+    $query = new WP_Query($args);
+    if (!$query->found_posts) return 0;
+
+    // Khởi tạo biến đếm
+    $counts = array('publish' => 0, 'draft' => 0, 'pending' => 0);
+    
+    foreach ($query->posts as $post_id) {
+        $status = get_post_status($post_id);
+        if (isset($counts[$status])) {
+            $counts[$status]++;
+        }
+    }
+
+    // Trả về kết quả dựa trên yêu cầu (tham số $type)
+    switch ($type) {
+        case 'publish':
+            return $counts['publish'];
+        case 'draft':
+            return $counts['draft'];
+        case 'pending':
+            return $counts['pending'];
+        case 'score':
+            $total = $query->found_posts;
+            $weighted_sum = ($counts['publish'] * 1) + ($counts['draft'] * 0.5);
+            return round(($weighted_sum / $total) * 100);
+        default:
+            return 0;
+    }
+}
