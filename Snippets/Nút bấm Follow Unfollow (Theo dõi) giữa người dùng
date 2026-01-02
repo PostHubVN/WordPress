@@ -1,0 +1,49 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Sử dụng Class thay vì ID để có thể dùng cho nhiều nút trên một trang
+    const followButtons = document.querySelectorAll('.follow-btn');
+
+    followButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // 2. Lấy ID tác giả từ thuộc tính data-user-id
+            const targetId = this.getAttribute('data-user-id');
+            if (!targetId) return;
+
+            // Hiệu ứng chờ khi đang xử lý
+            const originalText = this.innerText;
+            this.innerText = '...';
+            this.style.opacity = '0.5';
+
+            fetch('/wp-admin/admin-ajax.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: 'toggle_follow',
+                    target_id: targetId
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                this.style.opacity = '1';
+                if (data.success) {
+                    // 3. Cập nhật nội dung nút
+                    if (data.data.status === 'followed') {
+                        this.innerText = 'Đã theo dõi';
+                        this.classList.add('is-following');
+                    } else {
+                        this.innerText = 'Theo dõi';
+                        this.classList.remove('is-following');
+                    }
+                } else {
+                    alert('Vui lòng đăng nhập để thực hiện chức năng này!');
+                    this.innerText = originalText;
+                }
+            })
+            .catch(err => {
+                console.error('Lỗi:', err);
+                this.innerText = originalText;
+            });
+        });
+    });
+});
