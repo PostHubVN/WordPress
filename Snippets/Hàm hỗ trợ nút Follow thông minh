@@ -1,0 +1,9 @@
+function dev_get_follow_button_text() {
+    $target_id = get_the_author_meta('ID'); // Hoặc logic lấy ID tùy ngữ cảnh
+    $current_user_id = get_current_user_id();
+    
+    if (!$current_user_id) return 'Theo dõi';
+    
+    $following = get_user_meta($current_user_id, 'dev_following', true) ?: [];
+    return in_array($target_id, $following) ? 'Đã theo dõi' : 'Theo dõi';
+}
