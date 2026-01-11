@@ -1,0 +1,25 @@
+{
+  "@context": "https://schema.org",
+  "@graph": {
+    "@type": "Organization",
+    "@id": "https://www.posthub.vn/#organization/1",
+    "name": "PostHUB Việt Nam",
+    "url": "https://www.posthub.vn/",
+    "logo": "https://www.posthub.vn/wp-content/uploads/2025/12/cropped-logo-posthub-scaled-1.png",
+    "description": "Trong kỷ nguyên số hóa, việc tiếp cận thông tin không khó, nhưng để tìm thấy những kiến thức vừa có nền tảng học thuật vững chắc, vừa có giá trị ứng dụng thực tiễn là một thách thức lớn. PostHub Việt Nam được ra đời với sứ mệnh trở thành nhịp cầu nối liền giữa lý thuyết chuyên sâu và trải nghiệm thực tế. Chúng tôi không chỉ là một kho lưu trữ thông tin đơn thuần, mà là một Trung tâm tri thức đa ngành, nơi quy tụ các phân tích từ những nghiên cứu học thuật chuẩn mực đến những bài học \"xương máu\" từ thương trường.",
+    "founder": [
+      "https://www.posthub.vn/author/@nguyenkhanhut/#Person/founder",
+      "https://www.posthub.vn/@halinhnhi/#Person/founder"
+    ],
+    "foundingDate": "2025/12/01",
+    "sameAs": [
+      "https://docs.google.com/spreadsheets/d/1eyxnlUu9vDO7dlHZqHIuWPPUlSBBRDRSztznr7yp7wE/",
+      "https://about.me/posthubvietnam",
+      "https://www.youtube.com/channel/UCPaQB1fPg5dC-v9uJPb9aXA",
+      "https://www.facebook.com/profile.php?id=61585244201864",
+      "https://stackoverflow.com/users/32086238/posthub-vi%e1%bbt-nam",
+      "http://www.pinterest.com/PostHubVietNam",
+      "https://www.reddit.com/user/posthubvietnam/"
+    ]
+  }
+}
