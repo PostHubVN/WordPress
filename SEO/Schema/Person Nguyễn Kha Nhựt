@@ -1,0 +1,38 @@
+{
+  "@context": "https://schema.org",
+  "@graph": {
+    "@type": "Person",
+    "name": "Nguyễn Kha Nhựt",
+    "@id": "https://www.posthub.vn/author/@nguyenkhanhut/#Person/founder",
+    "url": "https://www.posthub.vn/author/@nguyenkhanhut",
+    "image": "https://www.posthub.vn/wp-content/uploads/2025/12/20201230_103813-scaled.jpg",
+    "jobTitle": "Đồng Sáng Lập & Giám đốc Điều hành",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "PostHub Việt Nam",
+      "#id": "https://www.posthub.vn/#organization/1",
+      "url": "https://www.posthub.vn/"
+    },
+    "knowsAbout": [
+      "Sáng Tạo Nội Dung",
+      "Lập Trình Viên",
+      "SEO"
+    ],
+    "sameAs": [
+      "https://about.me/nguyenkhanhut/",
+      "https://www.linkedin.com/in/nguyenkhanhut1998/",
+      "https://www.facebook.com/nguyenkhanhut1998/",
+      "https://www.instagram.com/nguyenkhanhut/",
+      "https://www.threads.com/@nguyenkhanhut"
+    ],
+    "email": "nguyenkhanhut@posthub.vn",
+    "description": "Nguyễn Kha Nhựt là chuyên gia trong lĩnh vực Digital Marketing và SEO, chuyên cung cấp giải pháp tăng trưởng thứ hạng bền vững và đam mê chia sẻ kiến thức cộng đồng.",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "ấp Định Phước, xã Định Thành",
+      "addressLocality": "Huyện Thới Lai",
+      "addressRegion": "Cần Thơ",
+      "addressCountry": "VN"
+    }
+  }
+}
