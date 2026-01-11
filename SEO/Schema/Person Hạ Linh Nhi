@@ -1,0 +1,28 @@
+{
+  "@context": "https://schema.org",
+  "@graph": {
+    "@type": "Person",
+    "name": "Hạ Linh Nhi",
+    "@id": "https://www.posthub.vn/author/@halinhnhi/#Person/founder",
+    "url": "https://www.posthub.vn/author/@halinhnhi/",
+    "image": "#",
+    "jobTitle": "Nhà Sáng Lập & Phát Triển Nội Dung",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "PostHub",
+      "url": "https://www.posthub.vn/"
+    },
+    "knowsAbout": [
+      "Sáng Tạo Nội Dung",
+      "SEO",
+      "Marketing"
+    ],
+    "sameAs": [
+      "https://www.facebook.com/halinhnhi.2003",
+      "https://halinhnhi.blogspot.com/",
+      "https://github.com/halinhnhi-0428",
+      "https://www.tiktok.com/@halinhnhi_0246"
+    ],
+    "email": "halinhnhi@posthub.vn"
+  }
+}
